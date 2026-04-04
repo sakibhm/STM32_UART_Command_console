@@ -1,0 +1,1 @@
+rm startup.o main.o main.elf main.bin
