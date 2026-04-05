@@ -33,6 +33,21 @@ int main (void)
         USART1_WaitRxne();
         char data = USART1_DR;
 
+        if(data == '\r')
+        {
+            USART1_WaitTxe();
+            USART1_DR = '\r';
+
+            USART1_WaitTxe();
+            USART1_DR = '\n';
+
+        }
+        else
+        {USART1_WaitTxe();
+         USART1_DR = data;
+        }
+
+
         if(index < 19)
         {
             buffer[index] = data;
@@ -64,6 +79,12 @@ int main (void)
                     USART1_DR = print[j];
                     j ++;
                 }
+                USART1_WaitTxe();
+                USART1_DR = '\r';
+
+                USART1_WaitTxe();
+                USART1_DR = '\n';
+
             }
         }
 
