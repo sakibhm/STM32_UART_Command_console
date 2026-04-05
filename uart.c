@@ -17,9 +17,9 @@ void USART1_CR1_TX_ENABLE(void)
     USART1_CR1 |= (1<<3);//enables TX
 }
 
-void USART1_BRR(void)
+void USART1_SET_BRR(uint16_t BAUD)
 {
-    USART1_BRR = 1667 ; //Baud rate = clk speed/baud rate.
+    USART1_BRR =BAUD  ; //Baud rate = PERIPH clk /baud rate.
 }
 
 
