@@ -1,1 +1,1 @@
-rm startup.o main.o main.elf main.bin
+rm startup.o main.o main.elf main.bin rcc.o gpioa.o led.o uart.o
