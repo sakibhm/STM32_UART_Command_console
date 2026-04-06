@@ -6,16 +6,7 @@
 #include "led.h"
 #include "uart.h"
 
-/*typedef struct{
-    char* name;
-    char* desc;
-} command;
 
-command commands[] = {
-    {">led on","-turns on the LED"},
-    {">led off","-turns off the LED"},
-    {">help","-shows list of all commands"}
-};*/
 
 void print_cmd(void)
 {
