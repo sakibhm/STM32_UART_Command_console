@@ -40,5 +40,36 @@ GCC ARM toolchain
 Termianl PuTTY/Tera Term
 Git & GitHUb
 
+## build file
+This project uses shell script to automate the build process
+
+this script performs:
+- assembly of startup file
+- compilation of source files
+- linking of linker.ld & all object files
+- generates .elf file
+
+## Delete File
+This project uses this shell script file 
+to remove previously generated build files before re-compilation
+
+## Repository structure
+- main.c
+- rcc.c
+- rcc.h
+- gpio.c
+- gpio.h
+- uart.c
+- uart.h
+- led.c
+- led.h
+- startup.s
+- linker.ld
+- build.sh
+- delete.sh
+- stm.h // register configuration
+
+
+
 ## future improvement
 Extend this shell to have a scheduler
