@@ -35,22 +35,26 @@ command commands[] = {
         while(commands[c].desc[z] != '\0')
         {
         USART1_WaitTxe();
-        USART1_DR = commands[c].desc[z];    //prints the description
+        USART1_DR = commands[c].desc[z];    //prints the description of command
         z++;
         }
 
         c++;
 
-        USART1_WaitTxe();
-        USART1_DR = '\r';
-
-        USART1_WaitTxe();
-        USART1_DR = '\n';
+        nxt_line();
     }
     
 }
 
+void nxt_line(void)
+{
+    USART1_WaitTxe();
+    USART1_DR = '\r';
 
+    USART1_WaitTxe();
+    USART1_DR = '\n';
+
+}
 
 int main (void)
 {
@@ -79,66 +83,75 @@ int main (void)
         USART1_WaitRxne();
         char data = USART1_DR;
 
-        if(data == '\r')
+        if(data == 127 || data == '\b')                    //for backspace handling
         {
-            USART1_WaitTxe();
-            USART1_DR = '\r';
+            if(index > 0)
+            {
+                index --;
+                buffer[index] = '\0';
 
-            USART1_WaitTxe();
-            USART1_DR = '\n';
+                USART1_WaitTxe();
+                USART1_DR = '\b';
 
+                USART1_WaitTxe();
+                USART1_DR = ' ';
+
+                USART1_WaitTxe();
+                USART1_DR = '\b';
+            }
         }
-        else
-        {USART1_WaitTxe();
-         USART1_DR = data;
-        }
-
-
-        if(index < 19)
+        else if(data == '\r' || data == '\n')   //for cmd parsind & execution
         {
-            buffer[index] = data;
-            index ++;
-        }
-
-        if(data == '\r' || data == '\n')
-        {
-            buffer[index-1] = '\0';
+            
+            buffer[index] = '\0';
             index = 0;
+            
 
             if(strcmp(buffer,"led on") == 0)
             {
                 LED_ON();
+                nxt_line();
             }
             else if(strcmp(buffer,"led off") == 0)
             {
                 LED_OFF();
-
+                nxt_line();
             }
             else if(strcmp(buffer,"help") == 0)
             {
-               print_cmd();
-               
+                nxt_line();
+                print_cmd();
+                
             }
             else
             {
-                char print[] = "Unknown Command";
+                nxt_line();
+                char fail_cmd[] = "UNKNOWN COMMAND";
                 int j = 0;
-                
-                while(print[j] != '\0')
+
+                while(fail_cmd[j] != '\0')
                 {
                     USART1_WaitTxe();
-                    USART1_DR = print[j];
+                    USART1_DR = fail_cmd[j];
                     j ++;
                 }
-                USART1_WaitTxe();
-                USART1_DR = '\r';
 
-                USART1_WaitTxe();
-                USART1_DR = '\n';
-
+                nxt_line();
             }
-        }
 
+            
+        }
+        else                            //for echoing & saving 
+        {
+
+            buffer[index] = data;
+            index ++;
+
+            USART1_WaitTxe();
+            USART1_DR = data;
+
+        }
+      
     }
-    
 }
+   
